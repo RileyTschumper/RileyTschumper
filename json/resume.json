@@ -1,0 +1,34 @@
+[
+  {
+    "technical-skills": {
+      "skill1": "Proficient in Java and JavaScript programming languages",
+      "skill2": "Exposure to development in Python and C through in-class projects and assignment",
+      "skill3": "Front-end skills in HTML and CSS",
+      "skill4": "Developed experience with PHP and MySQL as a result of personal projects",
+      "skill5": "Extensive use of GitHub for collaboration among teams "
+    },
+    "work-experience": {
+      "job1": {
+        "workplace": "University of St. Thomas",
+        "title": "Web Development Intern",
+        "duties": "Employed by the Marketing, Insights and Communication Creative Digital Team at the University of St. Thomas, my position responsibilities include: Work in various frameworks and functionality using HTML/CSS, Information Architecture, Quality Assurance, and marketing strategy & research (site audits, analytics, benchmarking). "
+      },
+      "job2": {
+        "workplace": "United States Department of Defense",
+        "title": "Research and Development Intern",
+        "duties": "Assigned to a project team tasked with providing support to end users through deployment of new technologies. Collaborated with a team of over 10 individuals to deploy usable software. Analyzed software output quantitatively and qualitatively to produce reports. Developed an efficient and effective workflow to test large data sets"
+      }
+    },
+    "education": {
+      "school": "University of St. Thomas",
+      "location": "St. Paul, MN",
+      "degree": "Bachelor of Science in Computer Science",
+      "graduation": "Expected Graduation: May 2020"
+    },
+    "links": {
+      "text": "Where to find me!",
+      "github-link": "https://github.com/RileyTschumper/",
+      "linkedin-link": "https://www.linkedin.com/in/riley-tschumper/"
+    }
+  }
+]
