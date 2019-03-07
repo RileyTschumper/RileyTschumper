@@ -1,0 +1,74 @@
+@charset "utf-8";
+/* CSS Document */
+body {
+  margin: 0;
+}
+
+#top-nav {
+  background-color: #297373;
+  overflow: hidden;
+  padding: 0.75rem 2rem;
+}
+
+.nav-container {
+  float: right;
+}
+
+#top-nav a {
+  color: #e6e6e6;
+  text-decoration: none;
+  padding: 2rem 0.5rem;
+  font-size: 1.5rem;
+}
+
+#top-nav a:hover {
+  background-color: #46c4c4;
+  transition: background-color 0.5s ease;
+}
+
+#bio-container {
+  width: 70%;
+  margin: auto;
+}
+
+#bio-container img {
+  display: block;
+  margin: auto;
+  margin-top: 25px;
+}
+
+.news-image {
+  margin: 2%;
+  float: left;
+  max-width: 500px;
+  /* Don't exceeed image size */
+  width: 100%;
+  /* Keep it responsive */
+  height: auto;
+  /* in aspect ratio */
+}
+
+.news-container {
+  width: 90%;
+  margin: auto;
+  margin-bottom: 5px;
+  display: flex;
+  background: #e6e6e6;
+}
+
+.news-container h4 {
+  margin-top: 1rem;
+}
+
+.news-container-left {
+  float: left;
+  width: 30%;
+  margin: 10px;
+}
+
+.news-container-right {
+  float: left;
+  margin: 0px 0px 0px 5px;
+  padding-left: 5px;
+  width: 65%;
+}
