@@ -51,7 +51,7 @@ function getTranslationList(){
   req.onreadystatechange = function() {
     if (req.readyState == 4 && req.status == 200) {
       console.log("tranlation list recieved");
-      translation_list = JSON.parse(req.responseText));
+      translation_list = JSON.parse(req.responseText);
     }
   };
 
