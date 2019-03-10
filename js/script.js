@@ -6,8 +6,9 @@ function InitIndex() {
 }
 
 function InitResume() {
-  getNavBar();
-  getResumeInfo();
+  getData(populateNav, "json/nav.json");
+  //getResumeInfo();
+  getData(populateResume, "json/resume.json");
 }
 
 var getData = function(populateLocation, url) {
@@ -62,36 +63,78 @@ function getNavBar() {
   req.send();
 }
 
-function getResumeInfo() {
-  var req = new XMLHttpRequest();
 
-  req.onreadystatechange = function() {
-    if (req.readyState == 4 && req.status == 200) {
-      console.log("Resume data recieved");
-      populateResume(JSON.parse(req.responseText));
-    }
-  };
-
-  req.open("GET", "json/resume.json", true);
-  req.send();
-}
-
-function getNewsInfo() {
-  var req = new XMLHttpRequest();
-
-  req.onreadystatechange = function() {
-    if (req.readyState == 4 && req.status == 200) {
-      console.log("News data recieved");
-      populateNews(JSON.parse(req.responseText));
-    }
-  };
-
-  req.open("GET", "json/news.json", true);
-  req.send();
-}
 
 function populateResume(data) {
-  for (var i = 0; i < data.length; i++) {}
+  for (var i = 0; i < data.length; i++) {
+    //title
+    var title = document.createElement("h1");
+    title.innerHTML = data[0].title;
+    document.getElementById("resume").appendChild(title);
+
+    //technical skills
+    var skills = document.createElement("h2");
+    skills.innerHTML = data[0].skills.title;
+    document.getElementById("resume").appendChild(skills);
+
+    var skills_list = document.createElement("ul");
+
+    for(var j = 0; j < data[0].skills.skills_list.length; j++){
+      var skill = document.createElement("li");
+      skill.innerHTML = data[0].skills.skills_list[j];
+      skills_list.appendChild(skill);
+    }
+    document.getElementById("resume").appendChild(skills_list);
+
+    //work experience
+    var work_experience = document.createElement("h2");
+    work_experience.innerHTML = data[0].work_experience.title;
+    document.getElementById("resume").appendChild(work_experience);
+
+    for(var z = 0; z < data[0].work_experience.jobs.length; z++){
+      console.log("here");
+      var job_title = document.createElement("h3");
+      
+
+      var workplace = document.createElement("h4");
+      if(data[0].work_experience.jobs[z].workplace_link){
+        var job_link = document.createElement("a");
+        job_link.setAttribute("href", data[0].work_experience.jobs[z].workplace_link);
+        job_link.innerHTML = data[0].work_experience.jobs[z].workplace;
+        workplace.appendChild(job_link);
+      }
+      else{
+        workplace.innerHTML = data[0].work_experience.jobs[z].workplace;
+      }
+      document.getElementById("resume").appendChild(workplace);
+
+
+    }
+
+    //education
+    var education = document.createElement("h2");
+    education.innerHTML = data[0].education.title;
+    document.getElementById("resume").appendChild(education);
+
+    var school = document.createElement("h3");
+    var school_link = document.createElement("a");
+    school_link.setAttribute("href", data[0].education.school_link);
+    school_link.innerHTML = data[0].education.school;
+    school.appendChild(school_link);
+    document.getElementById("resume").appendChild(school);
+
+    var location = document.createElement("p");
+    location.innerHTML = data[0].education.location;
+    document.getElementById("resume").appendChild(location);
+
+    var degree = document.createElement("p");
+    degree.innerHTML = data[0].education.degree;
+    document.getElementById("resume").appendChild(degree);
+
+    var graduation = document.createElement("p");
+    graduation.innerHTML = data[0].education.graduation;
+    document.getElementById("resume").appendChild(graduation);
+  }
 }
 
 var populateNews = function(data) {
