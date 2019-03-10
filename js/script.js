@@ -1,8 +1,13 @@
+var translation_list;
+
 function InitIndex() {
   //getNavBar();
   getData(populateNav, "json/nav.json");
   //getNewsInfo();
   getData(populateNews, "json/news.json");
+
+  translate("hello my name is", "el");
+  getTranslationList();
 }
 
 function InitResume() {
@@ -24,6 +29,37 @@ var getData = function(populateLocation, url) {
   req.open("GET", url, true);
   req.send();
 };
+
+var translate = function(text, language){
+  var req = new XMLHttpRequest();
+
+  req.onreadystatechange = function() {
+    if (req.readyState == 4 && req.status == 200) {
+      console.log("tranlated date recieved");
+      console.log(JSON.parse(req.responseText));
+    }
+  };
+
+  var url = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190310T205737Z.4bb98a2cc12eb124.f6b1e507245c5568148391050b6e4906c0a926c8&text=" + text + "&lang=" + language;
+  req.open("GET", url, true);
+  req.send();
+};
+
+function getTranslationList(){
+  var req = new XMLHttpRequest();
+
+  req.onreadystatechange = function() {
+    if (req.readyState == 4 && req.status == 200) {
+      console.log("tranlation list recieved");
+      translation_list = JSON.parse(req.responseText));
+    }
+  };
+
+  var url = "https://translate.yandex.net/api/v1.5/tr.json/getLangs?key=trnsl.1.1.20190310T205737Z.4bb98a2cc12eb124.f6b1e507245c5568148391050b6e4906c0a926c8&ui=en";
+  req.open("GET", url, true);
+  req.send();
+
+}
 
 var populateNav = function(data) {
   var name = document.createElement("a");
@@ -92,9 +128,9 @@ function populateResume(data) {
     document.getElementById("resume").appendChild(work_experience);
 
     for(var z = 0; z < data[0].work_experience.jobs.length; z++){
-      console.log("here");
       var job_title = document.createElement("h3");
-      
+      job_title.innerHTML = data[0].work_experience.jobs[z].title;
+      document.getElementById("resume").appendChild(job_title);
 
       var workplace = document.createElement("h4");
       if(data[0].work_experience.jobs[z].workplace_link){
@@ -108,6 +144,9 @@ function populateResume(data) {
       }
       document.getElementById("resume").appendChild(workplace);
 
+      var duties = document.createElement("p");
+      duties.innerHTML = data[0].work_experience.jobs[z].duties;
+      document.getElementById("resume").appendChild(duties);
 
     }
 
