@@ -1,13 +1,18 @@
 var translation_list;
 
+function Init(){
+  console.log("did something");
+  //return true;
+}
+
 function InitIndex() {
   //getNavBar();
-  getData(populateNav, "json/nav.json");
+  //getData(populateNav, "json/nav.json");
   //getNewsInfo();
   getData(populateNews, "json/news.json");
 
   translate("hello my name is", "el");
-  getTranslationList();
+  getTranslationListPromise().then(data => getNavData(populateNav, data, "json/nav.json"));
 }
 
 function InitResume() {
@@ -16,12 +21,26 @@ function InitResume() {
   getData(populateResume, "json/resume.json");
 }
 
+var getNavData = function(populateLocation, translateData, url) {
+  var req = new XMLHttpRequest();
+
+  req.onreadystatechange = function() {
+    if (req.readyState == 4 && req.status == 200) {
+      console.log("Nav data recieved");
+      populateLocation(JSON.parse(req.responseText), translateData);
+    }
+  };
+
+  req.open("GET", url, true);
+  req.send();
+};
+
 var getData = function(populateLocation, url) {
   var req = new XMLHttpRequest();
 
   req.onreadystatechange = function() {
     if (req.readyState == 4 && req.status == 200) {
-      console.log("Resume data recieved");
+      console.log("data recieved");
       populateLocation(JSON.parse(req.responseText));
     }
   };
@@ -30,6 +49,12 @@ var getData = function(populateLocation, url) {
   req.send();
 };
 
+function translate(language){
+  console.log("language code: " + language);
+}
+
+
+/*
 var translate = function(text, language){
   var req = new XMLHttpRequest();
 
@@ -44,6 +69,31 @@ var translate = function(text, language){
   req.open("GET", url, true);
   req.send();
 };
+
+*/
+
+function getTranslationListPromise(){
+  var p = new Promise((resolve,reject) => {
+    var req = new XMLHttpRequest();
+
+    req.onreadystatechange = function() {
+      if (req.readyState == 4 && req.status == 200) {
+        console.log("tranlation list recieved");
+        var data = JSON.parse(req.response);
+        resolve(data);
+      }
+      else if (req.readyState == 4) {
+        reject("Error: " + req.status);
+      }
+    };
+
+    var url = "https://translate.yandex.net/api/v1.5/tr.json/getLangs?key=trnsl.1.1.20190310T205737Z.4bb98a2cc12eb124.f6b1e507245c5568148391050b6e4906c0a926c8&ui=en";
+    req.open("GET", url, true);
+    req.send();
+  });
+  return p;
+
+}
 
 function getTranslationList(){
   var req = new XMLHttpRequest();
@@ -61,7 +111,7 @@ function getTranslationList(){
 
 }
 
-var populateNav = function(data) {
+var populateNav = function(data, translateData) {
   var name = document.createElement("a");
   name.id = "name";
   name.setAttribute("href", data[0].home_link);
@@ -83,6 +133,30 @@ var populateNav = function(data) {
   resume.innerHTML = data[0].resume;
   navContainer.appendChild(resume);
   document.getElementById("top-nav").appendChild(navContainer);
+
+  var dropdown = document.createElement("div");
+  dropdown.id = "dropdown";
+  var dropdown_button = document.createElement("button");
+  dropdown_button.className = "dropdown_button";
+  dropdown_button.innerHTML = data[0].dropdown;
+  dropdown.appendChild(dropdown_button);
+
+  var dropdown_content = document.createElement("div");
+  //console.log(translateData.langs);
+  for(var key in translateData.langs){
+    if(translateData.langs.hasOwnProperty(key)){
+      var a = document.createElement("a");
+      a.setAttribute("href","#");
+      var function_call = "translate(" + key + ");";
+      a.setAttribute("onclick",function_call);
+      a.innerHTML = translateData.langs[key]
+      dropdown_content.appendChild(a);
+      //console.log(key + " -> " + translateData.langs[key]);
+    }
+  }
+  dropdown.appendChild(dropdown_content);
+  navContainer.appendChild(dropdown);
+
 };
 
 function getNavBar() {
