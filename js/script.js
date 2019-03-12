@@ -9,10 +9,18 @@ function InitIndex() {
   //getNavBar();
   //getData(populateNav, "json/nav.json");
   //getNewsInfo();
-  getData(populateNews, "json/news.json");
+  
+  var language = "en";
+  //translate("hello my name is", "el");
+  getTranslationListPromise().then(data => getNavData(populateNav, data, language, "json/nav.json"));
+  getNewsData(populateNews, language, "json/news.json");
+}
 
-  translate("hello my name is", "el");
-  getTranslationListPromise().then(data => getNavData(populateNav, data, "json/nav.json"));
+
+var array = [];
+
+function outputData(data){
+  
 }
 
 function InitResume() {
@@ -21,13 +29,29 @@ function InitResume() {
   getData(populateResume, "json/resume.json");
 }
 
-var getNavData = function(populateLocation, translateData, url) {
+var getNavData = function(populateLocation, translateData, language, url) {
   var req = new XMLHttpRequest();
 
   req.onreadystatechange = function() {
     if (req.readyState == 4 && req.status == 200) {
       console.log("Nav data recieved");
-      populateLocation(JSON.parse(req.responseText), translateData);
+      console.log("language " + language);
+      populateLocation(JSON.parse(req.responseText), translateData, language);
+    }
+  };
+
+  req.open("GET", url, true);
+  req.send();
+};
+
+var getNewsData = function(populateLocation, language, url) {
+  var req = new XMLHttpRequest();
+
+  req.onreadystatechange = function() {
+    if (req.readyState == 4 && req.status == 200) {
+      console.log("Nav data recieved");
+      console.log("language " + language);
+      populateLocation(JSON.parse(req.responseText), language);
     }
   };
 
@@ -49,28 +73,54 @@ var getData = function(populateLocation, url) {
   req.send();
 };
 
-function translate(language){
+function translateResult(language){
+  getTranslationListPromise().then(data => getNavData(populateNav, data, language, "json/nav.json"));
+  getNewsData(populateNews, language, "json/news.json");
   console.log("language code: " + language);
 }
 
 
-/*
+
 var translate = function(text, language){
   var req = new XMLHttpRequest();
 
   req.onreadystatechange = function() {
     if (req.readyState == 4 && req.status == 200) {
-      console.log("tranlated date recieved");
-      console.log(JSON.parse(req.responseText));
+      console.log("tranlated data recieved");
+      return JSON.parse(req.responseText);
     }
   };
 
-  var url = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190310T205737Z.4bb98a2cc12eb124.f6b1e507245c5568148391050b6e4906c0a926c8&text=" + text + "&lang=" + language;
+  var url = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190310T205737Z.4bb98a2cc12eb124.f6b1e507245c5568148391050b6e4906c0a926c8&text=" + text + "&lang=" + language +"&format=plain";
   req.open("GET", url, true);
   req.send();
 };
 
-*/
+var translatePromise = function(text, language){
+  var p = new Promise((resolve,reject) => {
+    var req = new XMLHttpRequest();
+
+    req.onreadystatechange = function() {
+      if (req.readyState == 4 && req.status == 200) {
+        console.log("tranlated data recieved");
+        var data = JSON.parse(req.responseText);
+        console.log("heeereee " + data.text[0]);
+        //resolve(data.text[0], text);
+        resolve(data.text[0]);
+      }
+      else if (req.readyState == 4) {
+        reject("Error: " + req.status);
+      }
+    };
+  
+    var url = "https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190310T205737Z.4bb98a2cc12eb124.f6b1e507245c5568148391050b6e4906c0a926c8&text=" + text + "&lang=" + language;
+    req.open("GET", url, true);
+    req.send();
+
+  });
+  return p;
+}
+
 
 function getTranslationListPromise(){
   var p = new Promise((resolve,reject) => {
@@ -95,42 +145,49 @@ function getTranslationListPromise(){
 
 }
 
-function getTranslationList(){
-  var req = new XMLHttpRequest();
 
-  req.onreadystatechange = function() {
-    if (req.readyState == 4 && req.status == 200) {
-      console.log("tranlation list recieved");
-      translation_list = JSON.parse(req.responseText);
-    }
-  };
+var populateNav = function(data, translateData, language) {
+  console.log("langauge passed to popNav " + language);
+  var translatedData;
 
-  var url = "https://translate.yandex.net/api/v1.5/tr.json/getLangs?key=trnsl.1.1.20190310T205737Z.4bb98a2cc12eb124.f6b1e507245c5568148391050b6e4906c0a926c8&ui=en";
-  req.open("GET", url, true);
-  req.send();
+  //clears nav
+  document.getElementById("top-nav").innerHTML = "";
 
-}
-
-var populateNav = function(data, translateData) {
   var name = document.createElement("a");
   name.id = "name";
   name.setAttribute("href", data[0].home_link);
-  name.innerHTML = data[0].name;
+  //name.innerHTML = data[0].name;
+  translatePromise(data[0].name, language).then(data => {
+    name.innerHTML = data;
+  });
+  
   document.getElementById("top-nav").appendChild(name);
   var navContainer = document.createElement("div");
   navContainer.className = "nav-container";
 
   var home = document.createElement("a");
   home.setAttribute("href", data[0].home_link);
-  home.innerHTML = data[0].home;
+  //home.innerHTML = data[0].home;
+  translatePromise(data[0].home, language).then(data => {
+    home.innerHTML = data;
+  });
+
   navContainer.appendChild(home);
   var projects = document.createElement("a");
   projects.setAttribute("href", data[0].projects_link);
-  projects.innerHTML = data[0].projects;
+  //projects.innerHTML = data[0].projects;
+  translatePromise(data[0].projects, language).then(data => {
+    projects.innerHTML = data;
+  });
+
   navContainer.appendChild(projects);
   var resume = document.createElement("a");
   resume.setAttribute("href", data[0].resume_link);
-  resume.innerHTML = data[0].resume;
+  //resume.innerHTML = data[0].resume;
+  translatePromise(data[0].resume, language).then(data => {
+    resume.innerHTML = data;
+  });
+
   navContainer.appendChild(resume);
   document.getElementById("top-nav").appendChild(navContainer);
 
@@ -138,16 +195,21 @@ var populateNav = function(data, translateData) {
   dropdown.id = "dropdown";
   var dropdown_button = document.createElement("button");
   dropdown_button.className = "dropdown_button";
-  dropdown_button.innerHTML = data[0].dropdown;
+  //dropdown_button.innerHTML = data[0].dropdown;
+  translatePromise(data[0].dropdown, language).then(data => {
+    dropdown_button.innerHTML = data;
+  });
+
   dropdown.appendChild(dropdown_button);
 
   var dropdown_content = document.createElement("div");
+  dropdown_content.id = "dropdown_content";
   //console.log(translateData.langs);
   for(var key in translateData.langs){
     if(translateData.langs.hasOwnProperty(key)){
       var a = document.createElement("a");
       a.setAttribute("href","#");
-      var function_call = "translate(" + key + ");";
+      var function_call = "translateResult(\"" + key + "\");";
       a.setAttribute("onclick",function_call);
       a.innerHTML = translateData.langs[key]
       dropdown_content.appendChild(a);
@@ -250,7 +312,8 @@ function populateResume(data) {
   }
 }
 
-var populateNews = function(data) {
+var populateNews = async function(data, language) {
+  document.getElementById("news").innerHTML = "";
   for (var i = 0; i < data.length; i++) {
     var newsDiv = document.createElement("div");
     newsDiv.className = "news-container";
@@ -265,14 +328,23 @@ var populateNews = function(data) {
     newsDivRight.className = "news-container-right";
     newsDiv.appendChild(newsDivRight);
     var heading = document.createElement("h4");
-    heading.innerHTML = data[i].headline;
+    //heading.innerHTML = data[i].headline;
+    await translatePromise(data[i].headline, language).then(data => {
+      heading.innerHTML = data;
+    });
+
     newsDivRight.appendChild(heading);
     var date = document.createElement("h5");
     date.innerHTML = data[i].date;
     newsDivRight.appendChild(date);
     var text = document.createElement("p");
-    text.innerHTML = data[i].text;
+    //toString.text.innerHTML = data[i].text;
+    await translatePromise(data[i].text, language).then(data => {
+      text.innerHTML = data;
+    });
+    
     newsDivRight.appendChild(text);
-    document.body.appendChild(newsDiv);
+    //document.body.appendChild(newsDiv);
+    document.getElementById("news").appendChild(newsDiv);
   }
 };
