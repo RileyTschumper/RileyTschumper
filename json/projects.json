@@ -1,0 +1,35 @@
+[
+    {
+        "page_title":"Riley Tschumper's Projects"
+    },
+    {
+        "title": "Sign Finder",
+        "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
+        "image": "images/signfinder.PNG"
+    },
+    {
+        "title": "Safety Playbook",
+        "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
+        "image": "images/signfinder.PNG"
+    },
+    {
+        "title": "Farm Connect",
+        "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
+        "image": "images/signfinder.PNG"
+    },
+    {
+        "title": "Secure Chat Server",
+        "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
+        "image": "images/chat.jpg"
+    },
+    {
+        "title": "Assembler",
+        "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
+        "image": "images/assembler.PNG"
+    },
+    {
+        "title": "Sign Finder",
+        "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
+        "image": "images/signfinder.PNG"
+    }
+]

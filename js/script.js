@@ -8,11 +8,16 @@ function InitIndex() {
   getData(populateNews, language, "json/news.json");
 }
 
-
 function InitResume() {
   var language = "en";
   getTranslationListPromise().then(data => getNavData(populateNav, data, language, "json/nav.json"));
   getData(populateResume, language, "json/resume.json");
+}
+
+function InitProjects() {
+  var language = "en";
+  getTranslationListPromise().then(data => getNavData(populateNav, data, language, "json/nav.json"));
+  getData(populateProjects, language, "json/projects.json");
 }
 
 var getNavData = function(populateLocation, translateData, language, url) {
@@ -137,6 +142,40 @@ function getTranslationListPromise(){
   });
   return p;
 
+}
+
+var populateProjects = async function(data, language){
+  //clears projects
+  document.getElementById("projects").innerHTML = "";
+
+  var page_title = document.createElement("h1");
+  page_title.innerHTML = data[0].page_title;
+  document.getElementById("projects").appendChild(page_title);
+
+  var project_list = document.createElement("ul");
+  project_list.id = "project_list";
+  for(var i = 1; i < data.length;  i++){
+    var list_item = document.createElement("li");
+    var image = document.createElement("img");
+    image.setAttribute("src",data[i].image);
+    list_item.appendChild(image);
+
+    var project_details = document.createElement("div");
+    project_details.className = "project_details";
+    list_item.appendChild(project_details);
+
+    var title = document.createElement("h3");
+    title.innerHTML = data[i].title;
+    project_details.appendChild(title);
+
+    var project_description = document.createElement("p");
+    project_description.className = "project_description";
+    project_description.innerHTML = data[i].description;
+    project_details.appendChild(project_description);
+
+    project_list.appendChild(list_item);
+  }
+  document.getElementById("projects").appendChild(project_list);
 }
 
 
