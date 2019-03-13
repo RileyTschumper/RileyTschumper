@@ -1,32 +1,18 @@
-var translation_list;
-
 function Init(){
   console.log("did something");
-  //return true;
 }
 
 function InitIndex() {
-  //getNavBar();
-  //getData(populateNav, "json/nav.json");
-  //getNewsInfo();
-  
   var language = "en";
-  //translate("hello my name is", "el");
   getTranslationListPromise().then(data => getNavData(populateNav, data, language, "json/nav.json"));
-  getNewsData(populateNews, language, "json/news.json");
+  getData(populateNews, language, "json/news.json");
 }
 
-
-var array = [];
-
-function outputData(data){
-  
-}
 
 function InitResume() {
-  getData(populateNav, "json/nav.json");
-  //getResumeInfo();
-  getData(populateResume, "json/resume.json");
+  var language = "en";
+  getTranslationListPromise().then(data => getNavData(populateNav, data, language, "json/nav.json"));
+  getData(populateResume, language, "json/resume.json");
 }
 
 var getNavData = function(populateLocation, translateData, language, url) {
@@ -44,7 +30,7 @@ var getNavData = function(populateLocation, translateData, language, url) {
   req.send();
 };
 
-var getNewsData = function(populateLocation, language, url) {
+var getData = function(populateLocation, language, url) {
   var req = new XMLHttpRequest();
 
   req.onreadystatechange = function() {
@@ -58,7 +44,7 @@ var getNewsData = function(populateLocation, language, url) {
   req.open("GET", url, true);
   req.send();
 };
-
+/*
 var getData = function(populateLocation, url) {
   var req = new XMLHttpRequest();
 
@@ -72,15 +58,22 @@ var getData = function(populateLocation, url) {
   req.open("GET", url, true);
   req.send();
 };
+*/
 
 function translateResult(language){
   getTranslationListPromise().then(data => getNavData(populateNav, data, language, "json/nav.json"));
-  getNewsData(populateNews, language, "json/news.json");
+  if(document.getElementById("news") != null){
+    console.log("asddddddddddddddddddddddddddddddddddddddddddddddddddddd");
+    getData(populateNews, language, "json/news.json");
+  }
+  else{
+    getData(populateResume,language,"json/resume.json");
+  }
+
   console.log("language code: " + language);
 }
 
-
-
+/*
 var translate = function(text, language){
   var req = new XMLHttpRequest();
 
@@ -95,6 +88,7 @@ var translate = function(text, language){
   req.open("GET", url, true);
   req.send();
 };
+*/
 
 var translatePromise = function(text, language){
   var p = new Promise((resolve,reject) => {
@@ -148,7 +142,6 @@ function getTranslationListPromise(){
 
 var populateNav = function(data, translateData, language) {
   console.log("langauge passed to popNav " + language);
-  var translatedData;
 
   //clears nav
   document.getElementById("top-nav").innerHTML = "";
@@ -221,93 +214,120 @@ var populateNav = function(data, translateData, language) {
 
 };
 
-function getNavBar() {
-  var req = new XMLHttpRequest();
+async function populateResume(data, language) {
+  //clears resume
+  document.getElementById("resume").innerHTML = "";
 
-  req.onreadystatechange = function() {
-    if (req.readyState == 4 && req.status == 200) {
-      console.log("Resume data recieved");
-      populateNav(JSON.parse(req.responseText));
-    }
-  };
-
-  req.open("GET", "json/nav.json", true);
-  req.send();
-}
-
-
-
-function populateResume(data) {
   for (var i = 0; i < data.length; i++) {
     //title
     var title = document.createElement("h1");
-    title.innerHTML = data[0].title;
+    //title.innerHTML = data[0].title;
+    await translatePromise(data[0].title, language).then(data => {
+      title.innerHTML = data;
+    });
     document.getElementById("resume").appendChild(title);
 
     //technical skills
     var skills = document.createElement("h2");
-    skills.innerHTML = data[0].skills.title;
+    //skills.innerHTML = data[0].skills.title;
+    await translatePromise(data[0].skills.title, language).then(data => {
+      skills.innerHTML = data;
+    });
     document.getElementById("resume").appendChild(skills);
 
     var skills_list = document.createElement("ul");
 
     for(var j = 0; j < data[0].skills.skills_list.length; j++){
       var skill = document.createElement("li");
-      skill.innerHTML = data[0].skills.skills_list[j];
+      //skill.innerHTML = data[0].skills.skills_list[j];
+      await translatePromise(data[0].skills.skills_list[j], language).then(data => {
+        skill.innerHTML = data;
+      });
       skills_list.appendChild(skill);
     }
     document.getElementById("resume").appendChild(skills_list);
 
     //work experience
     var work_experience = document.createElement("h2");
-    work_experience.innerHTML = data[0].work_experience.title;
+    //work_experience.innerHTML = data[0].work_experience.title;
+    await translatePromise(data[0].work_experience.title, language).then(data => {
+      work_experience.innerHTML = data;
+    });
+
     document.getElementById("resume").appendChild(work_experience);
 
     for(var z = 0; z < data[0].work_experience.jobs.length; z++){
       var job_title = document.createElement("h3");
-      job_title.innerHTML = data[0].work_experience.jobs[z].title;
+      //job_title.innerHTML = data[0].work_experience.jobs[z].title;
+      await translatePromise(data[0].work_experience.jobs[z].title, language).then(data => {
+        job_title.innerHTML = data;
+      });
       document.getElementById("resume").appendChild(job_title);
 
       var workplace = document.createElement("h4");
       if(data[0].work_experience.jobs[z].workplace_link){
         var job_link = document.createElement("a");
         job_link.setAttribute("href", data[0].work_experience.jobs[z].workplace_link);
-        job_link.innerHTML = data[0].work_experience.jobs[z].workplace;
+        //job_link.innerHTML = data[0].work_experience.jobs[z].workplace;
+        await translatePromise(data[0].work_experience.jobs[z].workplace, language).then(data => {
+          job_link.innerHTML = data;
+        });
         workplace.appendChild(job_link);
       }
       else{
-        workplace.innerHTML = data[0].work_experience.jobs[z].workplace;
+        //workplace.innerHTML = data[0].work_experience.jobs[z].workplace;
+        await translatePromise(data[0].work_experience.jobs[z].workplace, language).then(data => {
+          workplace.innerHTML = data;
+        });
       }
       document.getElementById("resume").appendChild(workplace);
 
       var duties = document.createElement("p");
-      duties.innerHTML = data[0].work_experience.jobs[z].duties;
+      //duties.innerHTML = data[0].work_experience.jobs[z].duties;
+      await translatePromise(data[0].work_experience.jobs[z].duties, language).then(data => {
+        duties.innerHTML = data;
+      });
       document.getElementById("resume").appendChild(duties);
 
     }
 
     //education
     var education = document.createElement("h2");
-    education.innerHTML = data[0].education.title;
+    //education.innerHTML = data[0].education.title;
+    await translatePromise(data[0].education.title, language).then(data => {
+      education.innerHTML = data;
+    });
     document.getElementById("resume").appendChild(education);
 
     var school = document.createElement("h3");
     var school_link = document.createElement("a");
     school_link.setAttribute("href", data[0].education.school_link);
-    school_link.innerHTML = data[0].education.school;
+    //school_link.innerHTML = data[0].education.school;
+    await translatePromise(data[0].education.school, language).then(data => {
+      school_link.innerHTML = data;
+    });
     school.appendChild(school_link);
     document.getElementById("resume").appendChild(school);
 
     var location = document.createElement("p");
-    location.innerHTML = data[0].education.location;
+    //location.innerHTML = data[0].education.location;
+    await translatePromise(data[0].education.location, language).then(data => {
+      location.innerHTML = data;
+    });
     document.getElementById("resume").appendChild(location);
 
     var degree = document.createElement("p");
-    degree.innerHTML = data[0].education.degree;
+    //degree.innerHTML = data[0].education.degree;
+    await translatePromise(data[0].education.degree, language).then(data => {
+      degree.innerHTML = data;
+    });
     document.getElementById("resume").appendChild(degree);
 
     var graduation = document.createElement("p");
-    graduation.innerHTML = data[0].education.graduation;
+    //graduation.innerHTML = data[0].education.graduation;
+    await translatePromise(data[0].education.graduation, language).then(data => {
+      graduation.innerHTML = data;
+    });
     document.getElementById("resume").appendChild(graduation);
   }
 }
