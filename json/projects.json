@@ -3,33 +3,40 @@
         "page_title":"Riley Tschumper's Projects"
     },
     {
+        "id":"1",
         "title": "Sign Finder",
         "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
-        "image": "images/signfinder.PNG"
+        "image_thumbnail": "images/signfinder.PNG"
     },
     {
+        "id":"2",
         "title": "Safety Playbook",
         "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
-        "image": "images/signfinder.PNG"
+        "image_thumbnail": "images/signfinder.PNG"
     },
     {
+        "id":"3",
         "title": "Farm Connect",
         "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
-        "image": "images/signfinder.PNG"
+        "image_thumbnail": "images/signfinder.PNG",
+        "images":["images/signfinder.PNG", "images/chat.jpg", "images/assembler.PNG"]
     },
     {
+        "id":"4",
         "title": "Secure Chat Server",
         "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
-        "image": "images/chat.jpg"
+        "image_thumbnail": "images/chat.jpg"
     },
     {
+        "id":"5",
         "title": "Assembler",
         "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
-        "image": "images/assembler.PNG"
+        "image_thumbnail": "images/assembler.PNG"
     },
     {
+        "id":"6",
         "title": "Sign Finder",
         "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
-        "image": "images/signfinder.PNG"
+        "image_thumbnail": "images/signfinder.PNG"
     }
 ]

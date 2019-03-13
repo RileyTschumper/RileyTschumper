@@ -157,7 +157,9 @@ var populateProjects = async function(data, language){
   for(var i = 1; i < data.length;  i++){
     var list_item = document.createElement("li");
     var image = document.createElement("img");
-    image.setAttribute("src",data[i].image);
+    image.setAttribute("src",data[i].image_thumbnail);
+    var onclickFunction = "openLightbox(" + data[i].id + ");";
+    image.setAttribute("onclick",onclickFunction);
     list_item.appendChild(image);
 
     var project_details = document.createElement("div");
@@ -174,6 +176,33 @@ var populateProjects = async function(data, language){
     project_details.appendChild(project_description);
 
     project_list.appendChild(list_item);
+
+    //create modal div
+    modalDiv = document.createElement("div");
+    modalDiv.id = "myModal" + data[i].id;
+    modalDiv.className = "modal";
+
+    closeCursor = document.createElement("span");
+    closeCursor.className = "close cursor";
+    closeCursor.setAttribute("onclick","closeLightbox();");
+    closeCursor.innerHTML = "&times;"
+    modalDiv.appendChild(closeCursor);
+
+    for(var j = 0; j < data[i].images.length; j++){
+      var mySlide = document.createElement("div");
+      mySlide.className = "mySlides";
+
+      var slideNumber = document.createElement("div");
+      slideNumber.className = "numbertext";
+      var numberText = (j + 1) + " / " + data[i].images.length;
+      slideNumber.innerHTML = numberText;
+      mySlide.appendChild(numberText);
+
+      var slideImage = document.createElement("img");
+      slideImage.setAttribute("src",data[i].images[j]);
+      mySlide.appendChild(slideImage);
+    }
+    //ADD PREV AND NEXT CLICKERS
   }
   document.getElementById("projects").appendChild(project_list);
 }
