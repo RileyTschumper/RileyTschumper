@@ -244,6 +244,14 @@ body {
   top: 0;
 }
 
+.caption_container {
+  text-align: center;
+  background-color: black;
+  padding: 2px 16px;
+  color: white;
+  margin-top: 65vh; 
+}
+
 
 .mySlides img {
     position: fixed;

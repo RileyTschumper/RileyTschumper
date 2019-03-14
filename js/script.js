@@ -156,6 +156,7 @@ var populateProjects = async function(data, language){
   project_list.id = "project_list";
   for(var i = 1; i < data.length;  i++){
     var list_item = document.createElement("li");
+    list_item.id = "projectId" + data[i].id;
     var image = document.createElement("img");
     image.setAttribute("src",data[i].image_thumbnail);
     var onclickFunction = "openLightbox(" + data[i].id + ");";
@@ -167,10 +168,12 @@ var populateProjects = async function(data, language){
     list_item.appendChild(project_details);
 
     var title = document.createElement("h3");
+    title.id = "project_title" + data[i].id;
     title.innerHTML = data[i].title;
     project_details.appendChild(title);
 
     var project_description = document.createElement("p");
+    project_description.id = "project_description" + data[i].id;
     project_description.className = "project_description";
     project_description.innerHTML = data[i].description;
     project_details.appendChild(project_description);
@@ -222,6 +225,17 @@ var populateProjects = async function(data, language){
     modalContent.appendChild(next);
 
     //ADD caption container
+    var captionContainer = document.createElement("div");
+    captionContainer.id = "caption" + data[i].id;
+    captionContainer.className = "caption_container";
+    var captionHeading = document.createElement("h3");
+    captionHeading.id = "caption_heading" + data[i].id;
+    captionContainer.appendChild(captionHeading);
+    var caption = document.createElement("p");
+    caption.id = "caption_content" + data[i].id;
+    //caption.id = "caption" + data[i].id;
+    captionContainer.appendChild(caption);
+    modalContent.appendChild(captionContainer);
 
 
     modalDiv.appendChild(modalContent);
@@ -244,7 +258,6 @@ function closeLightbox(id) {
 }
 
 var slideIndex = 1;
-//showSlides(slideIndex);
 
 // Next/previous controls
 function plusSlides(n, id) {
@@ -262,22 +275,19 @@ function showSlides(n, id) {
   var elementId = "myModal" + id;
   var modalById = document.getElementById(elementId);
   var slides = modalById.getElementsByClassName("mySlides");
-  //var dots = document.getElementsByClassName("demo");
-  //var captionText = document.getElementById("caption");
+  var captionHeading = document.getElementById("caption_heading" + id);
+  var captionText = document.getElementById("caption_content" + id);
+  console.log("captionText: " + captionText);
   if (n > slides.length) {slideIndex = 1}
   if (n < 1) {slideIndex = slides.length}
   for (i = 0; i < slides.length; i++) {
     slides[i].style.display = "none";
   }
-  //for (i = 0; i < dots.length; i++) {
-    //dots[i].className = dots[i].className.replace(" active", "");
-  //}
   console.log("slide number acutal: " + (slideIndex - 1));
   slides[slideIndex-1].style.display = "block";
-  //dots[slideIndex-1].className += " active";
-  //captionText.innerHTML = dots[slideIndex-1].alt;
+  captionHeading.innerHTML = document.getElementById("project_title" + id).innerHTML;
+  captionText.innerHTML = document.getElementById("project_description" + id).innerHTML;
 }
-
 
 var populateNav = function(data, translateData, language) {
   console.log("langauge passed to popNav " + language);
