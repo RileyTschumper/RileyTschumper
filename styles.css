@@ -64,15 +64,16 @@ body {
   display: block;
 }
 
-#bio-container {
+#bio_container {
   width: 70%;
   margin: auto;
 }
 
-#bio-container img {
+#bio_container img {
   display: block;
   margin: auto;
   margin-top: 25px;
+  width: 20%;
 }
 
 .news-image {

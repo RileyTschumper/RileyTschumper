@@ -6,7 +6,8 @@ function InitIndex() {
   var language = "en";
   //fetches the list of languages that can be translated, then populates the navigation bar
   getTranslationListPromise().then(data => getNavData(populateNav, data, language, "json/nav.json"));
-
+  
+  getData(populateBio, undefined, "json/bio.json");
   getData(populateNews, undefined, "json/news.json");
 }
 
@@ -44,15 +45,13 @@ function translatePage(language){
 
   //checks what page it is currently on, translates the page respectively
   if(document.getElementById("news") != null){
-    console.log("getData for news");
+    getData(populateBio, language, "json/bio.json");
     getData(populateNews, language, "json/news.json");
   }
   else if(document.getElementById("resume") != null){
-    console.log("getData for Resume");
     getData(populateResume,language,"json/resume.json");
   }
   else if (document.getElementById("projects") != null){
-    console.log("getData for Projects");
     getData(populateProjects, language, "json/projects.json");
   }
 }
@@ -66,8 +65,6 @@ var getNavData = function(populateLocation, translateData, language, url) {
 
   req.onreadystatechange = function() {
     if (req.readyState == 4 && req.status == 200) {
-      console.log("Nav data recieved");
-      console.log("language " + language);
       populateLocation(JSON.parse(req.responseText), translateData, language);
     }
   };
@@ -85,8 +82,6 @@ var getData = function(populateLocation, language, url) {
 
   req.onreadystatechange = function() {
     if (req.readyState == 4 && req.status == 200) {
-      console.log("Nav data recieved");
-      console.log("language " + language);
       populateLocation(JSON.parse(req.responseText), language);
     }
   };
@@ -134,7 +129,6 @@ function getTranslationListPromise(){
 
     req.onreadystatechange = function() {
       if (req.readyState == 4 && req.status == 200) {
-        console.log("tranlation list recieved");
         var data = JSON.parse(req.response);
         resolve(data);
       }
@@ -154,6 +148,34 @@ function getTranslationListPromise(){
 }
 
 /*
+  Dynamically populates index.html page with data from bio.json
+*/
+function populateBio(data, language){
+  if(typeof language !== "undefined"){
+    document.getElementById("bio_container").innerHTML = "";
+
+    var image = document.createElement("img");
+    image.setAttribute("src",data.image);
+    document.getElementById("bio_container").appendChild(image);
+
+    var bio = document.createElement("p");
+    translatePromise(data.biography, language).then(data => {
+      bio.innerHTML = data;
+    });
+    document.getElementById("bio_container").appendChild(bio);
+  }
+  else{
+    var image = document.createElement("img");
+    image.setAttribute("src",data.image);
+    document.getElementById("bio_container").appendChild(image);
+
+    var bio = document.createElement("p");
+    bio.innerHTML = data.biography;
+    document.getElementById("bio_container").appendChild(bio);
+  }
+}
+
+/*
   Dynamically populates projects.html page given data from projects.json file.
   Language will be undefined when page is initialized, causing no translation API requests
 */
@@ -165,7 +187,6 @@ async function populateProjects(data, language){
 
     //creates h1 for page title
     var page_title = document.createElement("h1");
-    //page_title.innerHTML = data[0].page_title;
     translatePromise(data[0].page_title, language).then(data => {
       page_title.innerHTML = data;
     });
@@ -196,7 +217,6 @@ async function populateProjects(data, language){
       //project title
       var title = document.createElement("h3");
       title.id = "project_title" + data[i].id;
-      //title.innerHTML = data[i].title;
       await translatePromise(data[i].title, language).then(data => {
         title.innerHTML = data;
       });
@@ -206,7 +226,6 @@ async function populateProjects(data, language){
       var project_description = document.createElement("p");
       project_description.id = "project_description" + data[i].id;
       project_description.className = "project_description";
-      //project_description.innerHTML = data[i].description;
       await translatePromise(data[i].description, language).then(data => {
         project_description.innerHTML = data;
       });
@@ -430,27 +449,28 @@ function plusSlides(n, id) {
 
 // Shows slide based on slide number and id
 function showSlides(n, id) {
-  console.log("slide number passed: " + n);
+  slideIndex = n;
   var i;
   var elementId = "myModal" + id;
   var modalById = document.getElementById(elementId);
   var slides = modalById.getElementsByClassName("mySlides");
   var captionHeading = document.getElementById("caption_heading" + id);
   var captionText = document.getElementById("caption_content" + id);
-  console.log("captionText: " + captionText);
-  if (n > slides.length) {slideIndex = 1}
-  if (n < 1) {slideIndex = slides.length}
+  if (n > slides.length) {
+    slideIndex = 1;
+  }
+  if (n < 1) {
+    slideIndex = slides.length;
+  }
   for (i = 0; i < slides.length; i++) {
     slides[i].style.display = "none";
   }
-  console.log("slide number acutal: " + (slideIndex - 1));
   slides[slideIndex-1].style.display = "block";
   captionHeading.innerHTML = document.getElementById("project_title" + id).innerHTML;
   captionText.innerHTML = document.getElementById("project_description" + id).innerHTML;
 }
 
 function populateNav(data, translateData, language) {
-  console.log("langauge passed to popNav " + language);
 
   //clears nav
   document.getElementById("top-nav").innerHTML = "";
@@ -458,7 +478,6 @@ function populateNav(data, translateData, language) {
   var name = document.createElement("a");
   name.id = "name";
   name.setAttribute("href", data[0].home_link);
-  //name.innerHTML = data[0].name;
   translatePromise(data[0].name, language).then(data => {
     name.innerHTML = data;
   });
@@ -469,7 +488,6 @@ function populateNav(data, translateData, language) {
 
   var home = document.createElement("a");
   home.setAttribute("href", data[0].home_link);
-  //home.innerHTML = data[0].home;
   translatePromise(data[0].home, language).then(data => {
     home.innerHTML = data;
   });
@@ -477,7 +495,6 @@ function populateNav(data, translateData, language) {
   navContainer.appendChild(home);
   var projects = document.createElement("a");
   projects.setAttribute("href", data[0].projects_link);
-  //projects.innerHTML = data[0].projects;
   translatePromise(data[0].projects, language).then(data => {
     projects.innerHTML = data;
   });
@@ -485,7 +502,6 @@ function populateNav(data, translateData, language) {
   navContainer.appendChild(projects);
   var resume = document.createElement("a");
   resume.setAttribute("href", data[0].resume_link);
-  //resume.innerHTML = data[0].resume;
   translatePromise(data[0].resume, language).then(data => {
     resume.innerHTML = data;
   });
@@ -497,7 +513,6 @@ function populateNav(data, translateData, language) {
   dropdown.id = "dropdown";
   var dropdown_button = document.createElement("button");
   dropdown_button.className = "dropdown_button";
-  //dropdown_button.innerHTML = data[0].dropdown;
   translatePromise(data[0].dropdown, language).then(data => {
     dropdown_button.innerHTML = data;
   });
@@ -506,7 +521,6 @@ function populateNav(data, translateData, language) {
 
   var dropdown_content = document.createElement("div");
   dropdown_content.id = "dropdown_content";
-  //console.log(translateData.langs);
   for(var key in translateData.langs){
     if(translateData.langs.hasOwnProperty(key)){
       var a = document.createElement("a");
@@ -515,12 +529,10 @@ function populateNav(data, translateData, language) {
       a.setAttribute("onclick",function_call);
       a.innerHTML = translateData.langs[key]
       dropdown_content.appendChild(a);
-      //console.log(key + " -> " + translateData.langs[key]);
     }
   }
   dropdown.appendChild(dropdown_content);
   navContainer.appendChild(dropdown);
-
 }
 
 /*
@@ -536,7 +548,6 @@ async function populateResume(data, language) {
     for (var i = 0; i < data.length; i++) {
       //title
       var title = document.createElement("h1");
-      //title.innerHTML = data[0].title;
       await translatePromise(data[0].title, language).then(data => {
         title.innerHTML = data;
       });
@@ -544,7 +555,6 @@ async function populateResume(data, language) {
 
       //technical skills
       var skills = document.createElement("h2");
-      //skills.innerHTML = data[0].skills.title;
       await translatePromise(data[0].skills.title, language).then(data => {
         skills.innerHTML = data;
       });
@@ -554,7 +564,6 @@ async function populateResume(data, language) {
 
       for(var j = 0; j < data[0].skills.skills_list.length; j++){
         var skill = document.createElement("li");
-        //skill.innerHTML = data[0].skills.skills_list[j];
         await translatePromise(data[0].skills.skills_list[j], language).then(data => {
           skill.innerHTML = data;
         });
@@ -564,7 +573,6 @@ async function populateResume(data, language) {
 
       //work experience
       var work_experience = document.createElement("h2");
-      //work_experience.innerHTML = data[0].work_experience.title;
       await translatePromise(data[0].work_experience.title, language).then(data => {
         work_experience.innerHTML = data;
       });
@@ -573,7 +581,6 @@ async function populateResume(data, language) {
 
       for(var z = 0; z < data[0].work_experience.jobs.length; z++){
         var job_title = document.createElement("h3");
-        //job_title.innerHTML = data[0].work_experience.jobs[z].title;
         await translatePromise(data[0].work_experience.jobs[z].title, language).then(data => {
           job_title.innerHTML = data;
         });
@@ -583,14 +590,12 @@ async function populateResume(data, language) {
         if(data[0].work_experience.jobs[z].workplace_link){
           var job_link = document.createElement("a");
           job_link.setAttribute("href", data[0].work_experience.jobs[z].workplace_link);
-          //job_link.innerHTML = data[0].work_experience.jobs[z].workplace;
           await translatePromise(data[0].work_experience.jobs[z].workplace, language).then(data => {
             job_link.innerHTML = data;
           });
           workplace.appendChild(job_link);
         }
         else{
-          //workplace.innerHTML = data[0].work_experience.jobs[z].workplace;
           await translatePromise(data[0].work_experience.jobs[z].workplace, language).then(data => {
             workplace.innerHTML = data;
           });
@@ -598,7 +603,6 @@ async function populateResume(data, language) {
         document.getElementById("resume").appendChild(workplace);
 
         var duties = document.createElement("p");
-        //duties.innerHTML = data[0].work_experience.jobs[z].duties;
         await translatePromise(data[0].work_experience.jobs[z].duties, language).then(data => {
           duties.innerHTML = data;
         });
@@ -608,7 +612,6 @@ async function populateResume(data, language) {
 
       //education
       var education = document.createElement("h2");
-      //education.innerHTML = data[0].education.title;
       await translatePromise(data[0].education.title, language).then(data => {
         education.innerHTML = data;
       });
@@ -617,7 +620,6 @@ async function populateResume(data, language) {
       var school = document.createElement("h3");
       var school_link = document.createElement("a");
       school_link.setAttribute("href", data[0].education.school_link);
-      //school_link.innerHTML = data[0].education.school;
       await translatePromise(data[0].education.school, language).then(data => {
         school_link.innerHTML = data;
       });
@@ -625,21 +627,18 @@ async function populateResume(data, language) {
       document.getElementById("resume").appendChild(school);
 
       var location = document.createElement("p");
-      //location.innerHTML = data[0].education.location;
       await translatePromise(data[0].education.location, language).then(data => {
         location.innerHTML = data;
       });
       document.getElementById("resume").appendChild(location);
 
       var degree = document.createElement("p");
-      //degree.innerHTML = data[0].education.degree;
       await translatePromise(data[0].education.degree, language).then(data => {
         degree.innerHTML = data;
       });
       document.getElementById("resume").appendChild(degree);
 
       var graduation = document.createElement("p");
-      //graduation.innerHTML = data[0].education.graduation;
       await translatePromise(data[0].education.graduation, language).then(data => {
         graduation.innerHTML = data;
       });
@@ -733,7 +732,14 @@ async function populateNews(data, language){
     //clears news
     document.getElementById("news").innerHTML = "";
 
-    for (var i = 0; i < data.length; i++) {
+    var title = document.createElement("h1");
+    title.innerHTML = data[0].title;
+    await translatePromise(data[0].title, language).then(data => {
+      title.innerHTML = data;
+    });
+    document.getElementById("news").appendChild(title);
+
+    for (var i = 1; i < data.length; i++) {
       var newsDiv = document.createElement("div");
       newsDiv.className = "news-container";
       var newsDivLeft = document.createElement("div");
@@ -747,7 +753,6 @@ async function populateNews(data, language){
       newsDivRight.className = "news-container-right";
       newsDiv.appendChild(newsDivRight);
       var heading = document.createElement("h4");
-      //heading.innerHTML = data[i].headline;
       await translatePromise(data[i].headline, language).then(data => {
         heading.innerHTML = data;
       });
@@ -757,18 +762,20 @@ async function populateNews(data, language){
       date.innerHTML = data[i].date;
       newsDivRight.appendChild(date);
       var text = document.createElement("p");
-      //toString.text.innerHTML = data[i].text;
       await translatePromise(data[i].text, language).then(data => {
         text.innerHTML = data;
       });
       
       newsDivRight.appendChild(text);
-      //document.body.appendChild(newsDiv);
       document.getElementById("news").appendChild(newsDiv);
     }
   }
   else{
-    for (var i = 0; i < data.length; i++) {
+    var title = document.createElement("h1");
+    title.innerHTML = data[0].title;
+    document.getElementById("news").appendChild(title);
+
+    for (var i = 1; i < data.length; i++) {
       var newsDiv = document.createElement("div");
       newsDiv.className = "news-container";
       var newsDivLeft = document.createElement("div");
