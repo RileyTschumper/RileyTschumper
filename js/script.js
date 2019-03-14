@@ -105,14 +105,14 @@ var translatePromise = function(text, language){
 
     req.onreadystatechange = function() {
       if (req.readyState == 4 && req.status == 200) {
-        console.log("tranlated data recieved");
         var data = JSON.parse(req.responseText);
-        console.log("heeereee " + data.text[0]);
-        //resolve(data.text[0], text);
         resolve(data.text[0]);
       }
       else if (req.readyState == 4) {
-        reject("Error: " + req.status);
+        if(req.response != ""){
+          var data = JSON.parse(req.response);
+          alert("Error code: " + data.code + "\nMessage: " + data.message);
+        }
       }
     };
   
@@ -139,7 +139,10 @@ function getTranslationListPromise(){
         resolve(data);
       }
       else if (req.readyState == 4) {
-        reject("Error: " + req.status);
+        if(req.response != ""){
+          var data = JSON.parse(req.response);
+          alert("Error code: " + data.code + "\nMessage: " + data.message);
+        }
       }
     };
 
