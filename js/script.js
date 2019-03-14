@@ -1,22 +1,24 @@
-function Init(){
-  console.log("did something");
-}
-
 function InitIndex() {
   var language = "en";
+  //fetches the list of languages that can be translated, then populates the navigation bar
   getTranslationListPromise().then(data => getNavData(populateNav, data, language, "json/nav.json"));
+
   getData(populateNews, language, "json/news.json");
 }
 
 function InitResume() {
   var language = "en";
+  //fetches the list of languages that can be translated, then populates the navigation bar
   getTranslationListPromise().then(data => getNavData(populateNav, data, language, "json/nav.json"));
+
   getData(populateResume, language, "json/resume.json");
 }
 
 function InitProjects() {
   var language = "en";
+  //fetches the list of languages that can be translated, then populates the navigation bar
   getTranslationListPromise().then(data => getNavData(populateNav, data, language, "json/nav.json"));
+
   getData(populateProjects, language, "json/projects.json");
 }
 
@@ -49,33 +51,22 @@ var getData = function(populateLocation, language, url) {
   req.open("GET", url, true);
   req.send();
 };
-/*
-var getData = function(populateLocation, url) {
-  var req = new XMLHttpRequest();
-
-  req.onreadystatechange = function() {
-    if (req.readyState == 4 && req.status == 200) {
-      console.log("data recieved");
-      populateLocation(JSON.parse(req.responseText));
-    }
-  };
-
-  req.open("GET", url, true);
-  req.send();
-};
-*/
 
 function translateResult(language){
+  //fetches the list of languages that can be translated, then populates the navigation bar
   getTranslationListPromise().then(data => getNavData(populateNav, data, language, "json/nav.json"));
   if(document.getElementById("news") != null){
-    console.log("asddddddddddddddddddddddddddddddddddddddddddddddddddddd");
+    console.log("getData for news");
     getData(populateNews, language, "json/news.json");
   }
-  else{
+  else if(document.getElementById("resume") != null){
+    console.log("getData for Resume");
     getData(populateResume,language,"json/resume.json");
   }
-
-  console.log("language code: " + language);
+  else if (document.getElementById("projects") != null){
+    console.log("getData for Projects");
+    getData(populateProjects, language, "json/projects.json");
+  }
 }
 
 /*
@@ -148,34 +139,53 @@ var populateProjects = async function(data, language){
   //clears projects
   document.getElementById("projects").innerHTML = "";
 
+  //creates h1 for page title
   var page_title = document.createElement("h1");
-  page_title.innerHTML = data[0].page_title;
+  //page_title.innerHTML = data[0].page_title;
+  translatePromise(data[0].page_title, language).then(data => {
+    page_title.innerHTML = data;
+  });
   document.getElementById("projects").appendChild(page_title);
 
+  //creates unordered list
   var project_list = document.createElement("ul");
   project_list.id = "project_list";
+
+  //adds each of the projects in the projects.json file
   for(var i = 1; i < data.length;  i++){
+    //creates new list item for a project to be contained in
     var list_item = document.createElement("li");
     list_item.id = "projectId" + data[i].id;
+
+    //adds project image
     var image = document.createElement("img");
     image.setAttribute("src",data[i].image_thumbnail);
     var onclickFunction = "openLightbox(" + data[i].id + ");";
     image.setAttribute("onclick",onclickFunction);
     list_item.appendChild(image);
 
+    //div container that holds title and description
     var project_details = document.createElement("div");
     project_details.className = "project_details";
     list_item.appendChild(project_details);
 
+    //project title
     var title = document.createElement("h3");
     title.id = "project_title" + data[i].id;
-    title.innerHTML = data[i].title;
+    //title.innerHTML = data[i].title;
+    await translatePromise(data[i].title, language).then(data => {
+      title.innerHTML = data;
+    });
     project_details.appendChild(title);
 
+    //project description
     var project_description = document.createElement("p");
     project_description.id = "project_description" + data[i].id;
     project_description.className = "project_description";
-    project_description.innerHTML = data[i].description;
+    //project_description.innerHTML = data[i].description;
+    await translatePromise(data[i].description, language).then(data => {
+      project_description.innerHTML = data;
+    });
     project_details.appendChild(project_description);
 
     project_list.appendChild(list_item);
@@ -185,6 +195,7 @@ var populateProjects = async function(data, language){
     modalDiv.id = "myModal" + data[i].id;
     modalDiv.className = "modal";
 
+    //creates close button X
     closeCursor = document.createElement("span");
     closeCursor.className = "close cursor";
     onclickFunction = "closeLightbox(" + data[i].id + ");";
@@ -195,16 +206,19 @@ var populateProjects = async function(data, language){
     modalContent = document.createElement("div");
     modalContent.className = "modal_content";
 
+    //creates a slide for all images in the images array from projects.json file
     for(var j = 0; j < data[i].images.length; j++){
       var mySlide = document.createElement("div");
       mySlide.className = "mySlides";
 
+      //creates a div for the slide number of each image
       var slideNumber = document.createElement("div");
       slideNumber.className = "numbertext";
       var numberText = (j + 1) + " / " + data[i].images.length;
       slideNumber.innerHTML = numberText;
       mySlide.appendChild(slideNumber);
 
+      //creates image tag
       var slideImage = document.createElement("img");
       slideImage.setAttribute("src",data[i].images[j]);
       mySlide.appendChild(slideImage);
@@ -212,37 +226,42 @@ var populateProjects = async function(data, language){
       modalContent.appendChild(mySlide);
     }
     
+    //previous arrow <
     var prev = document.createElement("a");
     prev.className = "prev";
     prev.setAttribute("onclick","plusSlides(-1," + data[i].id + ")");
     prev.innerHTML = "&#10094;";
     modalContent.appendChild(prev);
 
+    //next arrow >
     var next = document.createElement("a");
     next.className = "next";
     next.setAttribute("onclick","plusSlides(1," + data[i].id + ")");
     next.innerHTML = "&#10095;";
     modalContent.appendChild(next);
 
-    //ADD caption container
+    //caption container
     var captionContainer = document.createElement("div");
     captionContainer.id = "caption" + data[i].id;
     captionContainer.className = "caption_container";
+    //caption heading
     var captionHeading = document.createElement("h3");
     captionHeading.id = "caption_heading" + data[i].id;
     captionContainer.appendChild(captionHeading);
+    //caption paragraph
     var caption = document.createElement("p");
     caption.id = "caption_content" + data[i].id;
-    //caption.id = "caption" + data[i].id;
     captionContainer.appendChild(caption);
+    //appends caption container to content div
     modalContent.appendChild(captionContainer);
 
-
+    //appends content div to master modal div
     modalDiv.appendChild(modalContent);
+    //append modal div to projects(hard coded into html file)
     document.getElementById("projects").appendChild(modalDiv);
 
-
   }
+  //append project list to projects(hard coded into html file)
   document.getElementById("projects").appendChild(project_list);
 }
 
@@ -482,7 +501,9 @@ async function populateResume(data, language) {
 }
 
 var populateNews = async function(data, language) {
+  //clears news
   document.getElementById("news").innerHTML = "";
+
   for (var i = 0; i < data.length; i++) {
     var newsDiv = document.createElement("div");
     newsDiv.className = "news-container";
