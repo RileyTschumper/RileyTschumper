@@ -1,20 +1,14 @@
 [
   {
+    "headline": "Study Aroad 2019 - Israel/Jordan",
+    "date": "1/29/2019",
+    "text": "As a part of a Theology course through the University of St. Thomas, I spend the month of January in Israel and Jordan. I returned with a new perspective on cultures throughout the world and a new found ambition for more global travel!",
+    "image": "images/study_abroad.jpg"
+  },
+  {
     "headline": "Summer 2019 - Internship",
     "date": "10/28/2018",
-    "text": "As of October 2018, I have accepted an internship for Summer 2019 at General Mills as an application developer. I am excited for the opportunity to work at such a global company.",
-    "image": "images/generalmills.jpg"
-  },
-  {
-    "headline": "Summer 2019 - Internship",
-    "date": "10/29/2018",
-    "text": "As of October 2018, I have accepted an internship for Summer 2019 at General Mills as an application developer. I am excited for the opportunity to work at such a global company.",
-    "image": "images/generalmills.jpg"
-  },
-  {
-    "headline": "Summer 2019 - Internship",
-    "date": "10/29/2018",
-    "text": "As of October 2018, I have accepted an internship for Summer 2019 at General Mills as an application developer. I am excited for the opportunity to work at such a global company.",
+    "text": "As of October 2018, I have accepted an internship for Summer 2019 at General Mills as an application developer. I am excited for the opportunity to work at such a well respected company.",
     "image": "images/generalmills.jpg"
   }
 ]
