@@ -1,47 +1,55 @@
 [
-    {
-        "page_title":"Riley Tschumper's Projects"
-    },
-    {
-        "id":"1",
-        "title": "Sign Finder",
-        "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
-        "image_thumbnail": "images/signfinder_tumbnail.jpg",
-        "images":["images/signfinder.PNG", "images/signfinder_table.PNG","images/signfinder_sql.PNG"]
-    },
-    {
-        "id":"2",
-        "title": "Safety Playbook",
-        "description": "Created at MinneHack 2018, Safety Playbook is a safer way for coaches to evaluate player's risk of injury at a given location on the field.",
-        "image_thumbnail": "images/playbook_thumbnail.jpg",
-        "images":["images/playbook.png"]
-    },
-    {
-        "id":"3",
-        "title": "Farm Connect",
-        "description": "Created at MinneHack 2019, Farm Connect is a virtual logbook for farms to document their progress throughout the growing season.",
-        "image_thumbnail": "images/farm_connect_thumbnail.jpg",
-        "images":["images/farm_connect.PNG", "images/farm_connect_overlay.PNG"]
-    },
-    {
-        "id":"4",
-        "title": "Secure Chat Server",
-        "description": "Using Beale Cipher, we created a secure chat server to send message to classmates.",
-        "image_thumbnail": "images/chat_thumbnail.jpg",
-        "images":["images/chat.jpg", "images/beale_cipher.jpg"]
-    },
-    {
-        "id":"5",
-        "title": "Assembler/MIPS Simulator",
-        "description": "Assembly code to machine language, then used the machine language to create a simulated piplelined architecture.",
-        "image_thumbnail": "images/architecture_thumbnail.jpg",
-        "images":["images/architecture.png", "images/assembler.PNG", "images/pipelined_architecture.png"]
-    },
-    {
-        "id":"6",
-        "title": "GeoDB",
-        "description": "A full stack application to be used by the Geology department to store rock structure information",
-        "image_thumbnail": "images/database_thumbnail.jpg",
-        "images":["images/database.png", "images/sql_server.png"]
-    }
+  {
+    "page_title": "Riley Tschumper's Projects"
+  },
+  {
+    "id": "1",
+    "title": "Sign Finder",
+    "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
+    "image_thumbnail": "images/signfinder_tumbnail.jpg",
+    "images": [
+      "images/signfinder.PNG",
+      "images/signfinder_table.PNG",
+      "images/signfinder_sql.PNG"
+    ]
+  },
+  {
+    "id": "2",
+    "title": "Safety Playbook",
+    "description": "Created at MinneHack 2018, Safety Playbook is a safer way for coaches to evaluate player's risk of injury at a given location on the field.",
+    "image_thumbnail": "images/playbook_thumbnail.jpg",
+    "images": ["images/playbook.png"]
+  },
+  {
+    "id": "3",
+    "title": "Farm Connect",
+    "description": "Created at MinneHack 2019, Farm Connect is a virtual logbook for farms to document their progress throughout the growing season.",
+    "image_thumbnail": "images/farm_connect_thumbnail.jpg",
+    "images": ["images/farm_connect.PNG", "images/farm_connect_overlay.png"]
+  },
+  {
+    "id": "4",
+    "title": "Secure Chat Server",
+    "description": "Using Beale Cipher, we created a secure chat server to send message to classmates.",
+    "image_thumbnail": "images/chat_thumbnail.jpg",
+    "images": ["images/chat.jpg", "images/beale_cipher.jpg"]
+  },
+  {
+    "id": "5",
+    "title": "Assembler/MIPS Simulator",
+    "description": "Assembly code to machine language, then used the machine language to create a simulated piplelined architecture.",
+    "image_thumbnail": "images/architecture_thumbnail.jpg",
+    "images": [
+      "images/architecture.png",
+      "images/assembler.PNG",
+      "images/pipelined_architecture.png"
+    ]
+  },
+  {
+    "id": "6",
+    "title": "GeoDB",
+    "description": "A full stack application to be used by the Geology department to store rock structure information",
+    "image_thumbnail": "images/database_thumbnail.jpg",
+    "images": ["images/database.png", "images/sql_server.png"]
+  }
 ]
