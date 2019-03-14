@@ -6,13 +6,15 @@
         "id":"1",
         "title": "Sign Finder",
         "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
-        "image_thumbnail": "images/signfinder.PNG"
+        "image_thumbnail": "images/signfinder.PNG",
+        "images":["images/stock1.jpg", "images/stock2.jpg"]
     },
     {
         "id":"2",
         "title": "Safety Playbook",
         "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
-        "image_thumbnail": "images/signfinder.PNG"
+        "image_thumbnail": "images/signfinder.PNG",
+        "images":["images/stock2.jpg", "images/stock5.jpg"]
     },
     {
         "id":"3",
@@ -25,18 +27,21 @@
         "id":"4",
         "title": "Secure Chat Server",
         "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
-        "image_thumbnail": "images/chat.jpg"
+        "image_thumbnail": "images/chat.jpg",
+        "images":["images/stock4.jpg", "images/stock5.jpg"]
     },
     {
         "id":"5",
         "title": "Assembler",
         "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
-        "image_thumbnail": "images/assembler.PNG"
+        "image_thumbnail": "images/assembler.PNG",
+        "images":["images/stock2.jpg", "images/stock5.jpg", "images/stock3.jpg"]
     },
     {
         "id":"6",
         "title": "Sign Finder",
         "description": "A sign inventorying application for companies and cities, allowing users to interactively place signs at their specific locations.",
-        "image_thumbnail": "images/signfinder.PNG"
+        "image_thumbnail": "images/signfinder.PNG",
+        "images":["images/stock1.jpg", "images/stock2.jpg", "images/stock3.jpg","images/stock4.jpg"]
     }
 ]

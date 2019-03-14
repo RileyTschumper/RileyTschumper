@@ -184,9 +184,13 @@ var populateProjects = async function(data, language){
 
     closeCursor = document.createElement("span");
     closeCursor.className = "close cursor";
-    closeCursor.setAttribute("onclick","closeLightbox();");
+    onclickFunction = "closeLightbox(" + data[i].id + ");";
+    closeCursor.setAttribute("onclick",onclickFunction);
     closeCursor.innerHTML = "&times;"
     modalDiv.appendChild(closeCursor);
+
+    modalContent = document.createElement("div");
+    modalContent.className = "modal_content";
 
     for(var j = 0; j < data[i].images.length; j++){
       var mySlide = document.createElement("div");
@@ -196,15 +200,82 @@ var populateProjects = async function(data, language){
       slideNumber.className = "numbertext";
       var numberText = (j + 1) + " / " + data[i].images.length;
       slideNumber.innerHTML = numberText;
-      mySlide.appendChild(numberText);
+      mySlide.appendChild(slideNumber);
 
       var slideImage = document.createElement("img");
       slideImage.setAttribute("src",data[i].images[j]);
       mySlide.appendChild(slideImage);
+
+      modalContent.appendChild(mySlide);
     }
-    //ADD PREV AND NEXT CLICKERS
+    
+    var prev = document.createElement("a");
+    prev.className = "prev";
+    prev.setAttribute("onclick","plusSlides(-1," + data[i].id + ")");
+    prev.innerHTML = "&#10094;";
+    modalContent.appendChild(prev);
+
+    var next = document.createElement("a");
+    next.className = "next";
+    next.setAttribute("onclick","plusSlides(1," + data[i].id + ")");
+    next.innerHTML = "&#10095;";
+    modalContent.appendChild(next);
+
+    //ADD caption container
+
+
+    modalDiv.appendChild(modalContent);
+    document.getElementById("projects").appendChild(modalDiv);
+
+
   }
   document.getElementById("projects").appendChild(project_list);
+}
+
+function openLightbox(id) {
+  var elementId = "myModal" + id;
+  document.getElementById(elementId).style.display = "block";
+  showSlides(1, id);
+}
+
+function closeLightbox(id) {
+  var elementId = "myModal" + id;
+  document.getElementById(elementId).style.display = "none";
+}
+
+var slideIndex = 1;
+//showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n, id) {
+  showSlides(slideIndex += n, id);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n, id) {
+  console.log("slide number passed: " + n);
+  var i;
+  var elementId = "myModal" + id;
+  var modalById = document.getElementById(elementId);
+  var slides = modalById.getElementsByClassName("mySlides");
+  //var dots = document.getElementsByClassName("demo");
+  //var captionText = document.getElementById("caption");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  //for (i = 0; i < dots.length; i++) {
+    //dots[i].className = dots[i].className.replace(" active", "");
+  //}
+  console.log("slide number acutal: " + (slideIndex - 1));
+  slides[slideIndex-1].style.display = "block";
+  //dots[slideIndex-1].className += " active";
+  //captionText.innerHTML = dots[slideIndex-1].alt;
 }
 
 
